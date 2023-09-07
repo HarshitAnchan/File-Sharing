@@ -4,21 +4,108 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>File Sharing</title>
+  <style>
+    /* Your existing CSS styles */
+
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+    .file-link {
+      color: #2962ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .file-link:hover {
+      color: #0039cb;
+    }
+    .upload-message {
+      margin-bottom: 1.5rem;
+      font-size: 18px;
+      color: #4caf50;
+    }
+    .form-label {
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+      color: #555;
+    }
+    .form-input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+    .form-input[type="file"] {
+      border: none;
+      padding: 0;
+    }
+    .share-button {
+      background-color: #2962ff;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .share-button:hover {
+      background-color: #0039cb;
+    }
+  
+  </style>
+  <script>
+    window.onload = function() {
+      // Clear file link and input values on page reload
+      if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+        document.querySelector('.upload-message').style.display = 'none';
+        document.querySelector('.file-link').textContent = '';
+        document.querySelector('#file').value = '';
+        document.querySelector('#password').value = '';
+      }
+    };
+  </script>
 </head>
 <body>
-  <% if (locals.fileLink != null) { %>
-    <div style="margin-bottom: 1rem;">
-      Your file is upload
-      <a href="<%= locals.fileLink %>"><%= locals.fileLink %></a>
-    </div>
-  <% } %>
-  <form action="/upload" method="post" style="display: grid; gap: .5rem; grid-template-columns: auto 1fr; max-width: 500px; margin: 0 auto;" enctype="multipart/form-data">
-    <label for="file">File:</label>
-    <input type="file" id="file" name="file" required />
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" />
-    <button style="grid-column: span 2;" type="submit">Share</button>
-  </form>
+  <div class="container">
+    <% if (locals.fileLink != null) { %>
+      <div class="upload-message">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="32" height="32">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm2 14h-4v-2h4v2zm0-4h-4V6h4v6z"/>
+        </svg>
+        Your file has been uploaded! Access it using the link below:
+        <br>
+        <a class="file-link" href="<%= locals.fileLink %>"><%= locals.fileLink %></a>
+      </div>
+    <% } %>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label class="form-label" for="file">Choose a File:</label>
+      <input class="form-input" type="file" id="file" name="file" required />
+      <label class="form-label" for="password">Password (optional):</label>
+      <input class="form-input" type="password" id="password" name="password" />
+      <button class="share-button" type="submit">Share</button>
+    </form>
+  </div>
 </body>
 </html>
