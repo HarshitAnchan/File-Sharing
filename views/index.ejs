@@ -6,20 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>File Sharing</title>
   <style>
-    /* Your existing CSS styles */
-
-    
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f2f5;
+      background: linear-gradient(to right, #3498db, #2c3e50);
       margin: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
+
     .container {
-      background-color: #ffffff;
+      background-color: #ecf0f3;
       padding: 30px;
       border-radius: 8px;
       box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
@@ -27,38 +25,58 @@
       max-width: 500px;
       text-align: center;
     }
-    .file-link {
-      color: #2962ff;
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-    .file-link:hover {
-      color: #0039cb;
-    }
+
     .upload-message {
       margin-bottom: 1.5rem;
       font-size: 18px;
       color: #4caf50;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    .file-link {
+      color: #2962ff;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      margin-top: 10px;
+      word-wrap: break-word;
+    }
+
+    .file-link:hover {
+      color: #0039cb;
+    }
+
     .form-label {
       font-weight: bold;
       margin-bottom: 10px;
       display: block;
       color: #555;
     }
+
     .form-input {
-      width: 100%;
+      width: calc(100% - 20px);
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 14px;
       margin-bottom: 15px;
       transition: border-color 0.3s ease;
+      box-sizing: border-box;
     }
+
     .form-input[type="file"] {
       border: none;
       padding: 0;
     }
+
+    .file-preview {
+      margin-top: 15px;
+      max-width: 100%;
+      height: auto;
+      display: none;
+    }
+
     .share-button {
       background-color: #2962ff;
       color: #ffffff;
@@ -69,21 +87,46 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     .share-button:hover {
       background-color: #0039cb;
     }
-  
+
   </style>
   <script>
     window.onload = function() {
-      // Clear file link and input values on page reload
+      // Clear file link, input values, and hide preview on page reload
       if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
         document.querySelector('.upload-message').style.display = 'none';
         document.querySelector('.file-link').textContent = '';
         document.querySelector('#file').value = '';
         document.querySelector('#password').value = '';
+        hideFilePreview();
       }
     };
+
+    // Function to display file preview
+    function displayFilePreview() {
+      const fileInput = document.getElementById('file');
+      const filePreview = document.getElementById('file-preview');
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          filePreview.src = e.target.result;
+          filePreview.style.display = 'block';
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+      }
+    }
+
+    // Function to hide file preview
+    function hideFilePreview() {
+      const filePreview = document.getElementById('file-preview');
+      filePreview.style.display = 'none';
+    }
   </script>
 </head>
 <body>
@@ -99,9 +142,12 @@
         <a class="file-link" href="<%= locals.fileLink %>"><%= locals.fileLink %></a>
       </div>
     <% } %>
-    <form action="/upload" method="post" enctype="multipart/form-data">
+    <form action="/upload" method="post" enctype="multipart/form-data" oninput="displayFilePreview()">
       <label class="form-label" for="file">Choose a File:</label>
       <input class="form-input" type="file" id="file" name="file" required />
+      <div class="file-preview-container">
+        <img id="file-preview" class="file-preview" alt="File Preview" />
+      </div>
       <label class="form-label" for="password">Password (optional):</label>
       <input class="form-input" type="password" id="password" name="password" />
       <button class="share-button" type="submit">Share</button>
