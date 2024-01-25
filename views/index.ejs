@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,11 +71,22 @@
       padding: 0;
     }
 
+    .file-preview-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .file-preview {
-      margin-top: 15px;
       max-width: 100%;
       height: auto;
-      display: none;
+      margin: 5px;
+    }
+
+    .pdf-preview {
+      width: 100%;
+      height: 400px; /* Set a fixed height for the PDF preview */
+      border: 1px solid #ccc;
     }
 
     .share-button {
@@ -92,9 +104,24 @@
       background-color: #0039cb;
     }
 
+    .preview-button {
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    .preview-button:hover {
+      background-color: #388e3c;
+    }
   </style>
   <script>
-    window.onload = function() {
+    window.onload = function () {
       // Clear file link, input values, and hide preview on page reload
       if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
         document.querySelector('.upload-message').style.display = 'none';
@@ -108,50 +135,73 @@
     // Function to display file preview
     function displayFilePreview() {
       const fileInput = document.getElementById('file');
-      const filePreview = document.getElementById('file-preview');
+      const filePreviewContainer = document.getElementById('file-preview-container');
 
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
+      // Clear existing previews
+      filePreviewContainer.innerHTML = '';
 
-        reader.onload = function(e) {
-          filePreview.src = e.target.result;
-          filePreview.style.display = 'block';
-        };
+      if (fileInput.files && fileInput.files.length > 0) {
+        // Loop through each selected file
+        for (const file of fileInput.files) {
+          const reader = new FileReader();
+          const filePreview = document.createElement('div');
 
-        reader.readAsDataURL(fileInput.files[0]);
+          reader.onload = function (e) {
+            if (file.type.startsWith('image/')) {
+              // If it's an image, create an img element
+              const imgPreview = document.createElement('img');
+              imgPreview.src = e.target.result;
+              imgPreview.classList.add('file-preview');
+              filePreview.appendChild(imgPreview);
+            } else if (file.type === 'application/pdf') {
+              // If it's a PDF, create an iframe to embed the PDF content
+              const pdfPreview = document.createElement('object');
+              pdfPreview.type = 'application/pdf';
+              pdfPreview.data = e.target.result;
+              pdfPreview.classList.add('file-preview', 'pdf-preview');
+              filePreview.appendChild(pdfPreview);
+            }
+
+            filePreviewContainer.appendChild(filePreview);
+          };
+
+          // Read the file as data URL
+          reader.readAsDataURL(file);
+        }
       }
     }
 
     // Function to hide file preview
     function hideFilePreview() {
-      const filePreview = document.getElementById('file-preview');
-      filePreview.style.display = 'none';
+      const filePreviewContainer = document.getElementById('file-preview-container');
+      filePreviewContainer.innerHTML = ''; // Clear previews
     }
   </script>
 </head>
+
 <body>
   <div class="container">
     <% if (locals.fileLink != null) { %>
-      <div class="upload-message">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="32" height="32">
-          <path d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm2 14h-4v-2h4v2zm0-4h-4V6h4v6z"/>
-        </svg>
-        Your file has been uploaded! Access it using the link below:
-        <br>
-        <a class="file-link" href="<%= locals.fileLink %>"><%= locals.fileLink %></a>
-      </div>
+    <div class="upload-message">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="32" height="32">
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm2 14h-4v-2h4v2zm0-4h-4V6h4v6z" />
+      </svg>
+      Your file has been uploaded! Access it using the link below:
+      <br>
+      <a class="file-link" href="<%= locals.fileLink %>"><%= locals.fileLink %></a>
+    </div>
     <% } %>
-    <form action="/upload" method="post" enctype="multipart/form-data" oninput="displayFilePreview()">
-      <label class="form-label" for="file">Choose a File:</label>
-      <input class="form-input" type="file" id="file" name="file" required />
-      <div class="file-preview-container">
-        <img id="file-preview" class="file-preview" alt="File Preview" />
-      </div>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <label class="form-label" for="file">Choose Files:</label>
+      <input class="form-input" type="file" id="file" name="file" required multiple />
+      <div class="file-preview-container" id="file-preview-container"></div>
       <label class="form-label" for="password">Password (optional):</label>
       <input class="form-input" type="password" id="password" name="password" />
       <button class="share-button" type="submit">Share</button>
+      <button class="preview-button" type="button" onclick="displayFilePreview()">Preview Files</button>
     </form>
   </div>
 </body>
+
 </html>
