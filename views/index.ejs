@@ -13,18 +13,27 @@
       display: flex;
       flex-direction: column;
       margin: 10px;
+      background-color: #333;
+
       height: 97vh;
     }
 
     .container {
       display: flex;
       flex: 1;
+      /* border: 4px solid #00bcd4; */
+      background: 0px 10px 20px rgba(0, 0, 0, 0.2);
+      background-color: #333;
+      /* background-color: #1e1e1e; */
+
+
     }
 
     .upload-section {
   background: url('your-image-url.jpg') center/cover;
-  padding: 30px;
-  border: 2px solid #000000;
+  padding: 100px;
+  
+  /* border: 2px solid #000000; */
   border-radius: 0;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
   flex: 1;
@@ -34,10 +43,10 @@
   font-family: 'YourChosenFont', sans-serif; /* Replace 'YourChosenFont' with the desired font name */
 }
 
-.upload-section:hover {
+/* .upload-section:hover {
   background: #ecf0f1;
   box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
-}
+} */
 
     .upload-message {
       margin-bottom: 1.5rem;
@@ -60,21 +69,23 @@
       color: #0039cb;
     }
   form {
-  border: 2px dashed #2962ff; /* Set border style to dashed and color to your preference */
+  border: 4px solid #00bcd4; /* Cyan border */
   border-radius: 8px;
-  padding: 20px;
+  padding: 30px;
 }
     .form-label {
-      color: #333;
+      color: #ffffff;
       font-size: 16px;
+        padding: 30px;
+
     }
 
     .form-input {
   width: calc(100% - 20px);
   padding: 12px;
   border: none; /* Remove the default border */
-  border: 2px solid #1b1b1c; /* Add a bottom border with your preferred color */
-  border-radius: 0;
+  border: 2px solid #ffffff; /* Add a bottom border with your preferred color */
+  border-radius: 8px;
   font-size: 16px;
   margin-bottom: 20px;
   transition: border-color 0.3s ease;
@@ -99,14 +110,14 @@
     }
 
     .share-button:hover {
-      background-color: #0039cb;
+      background-color: #388e3c;
       transform: scale(1.1);
     }
 
     .preview-section {
-      background-color: rgb(230, 240, 241);
+      background-color: #333;
       padding: 30px;
-      border: #000000 2px solid;
+      /* border: #000000 2px solid; */
       box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
       flex: 1;
       text-align: center;
@@ -114,10 +125,10 @@
       transition: background-color 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .preview-section:hover {
+    /* .preview-section:hover {
       background-color: #ecf0f1;
       box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.3);
-    }
+    } */
 
     .preview-button {
       background-color: #2962ff;
