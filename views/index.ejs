@@ -54,7 +54,7 @@
       }
 
       .file-link {
-        color: #2962ff;
+        color: #00bcd4;
         text-decoration: none;
         transition: color 0.3s ease;
         margin-top: 10px;
@@ -76,10 +76,10 @@
       }
       
       .card {
-        border-radius: 10px;
+        border-radius: 2px;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
         width: 800px;
-        height: 260px;
+        height: 310px;
         background-color: #524f4f;
         padding: 10px 30px 40px;
         margin-bottom: 40px;
@@ -99,7 +99,7 @@
         justify-content: center;
         flex-direction: column;
         border: 3px dotted #a3a3a3;
-        border-radius: 5px;
+        border-radius: 2px;
       }
       
       .drop_box h4 {
@@ -116,23 +116,21 @@
       }
       
       .btn {
-        text-decoration: none;
-        background-color: #005af0;
+        background-color: #00bcd4;
         color: #ffffff;
-        padding: 10px 20px;
-        border: none;
-        outline: none;
-        transition: 0.3s;
-      }
-      
-      .btn:hover{
-        text-decoration: none;
-        background-color: #ffffff;
-        color: #005af0;
-        padding: 10px 20px;
-        border: none;
-        outline: 1px solid #010101;
-      }
+        border: 2px solid #00bcd4; 
+        border-radius: 2px;
+        padding: 14px 28px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    
+    .btn:hover {
+        background-color: #00cccc;
+        transform: scale(1.1);
+    }
+    
       .form input {
         margin: 10px 0;
         width: 100%;
@@ -140,14 +138,14 @@
         border: none;
         outline: none;
         padding: 12px 20px;
-        border-radius: 4px;
+        border-radius: 2px;
       }
       .form-input {
         width: calc(100% - 20px);
         padding: 12px;
         border: none;
         border: 2px solid #fdf9f9;
-        border-radius: 8px;
+        border-radius: 2px;
         font-size: 16px;
         margin-bottom: 20px;
         transition: border-color 0.3s ease;
@@ -161,10 +159,10 @@
       }
 
       .share-button {
-        background-color: #2962ff;
+        background-color: #00bcd4;
         color: #ffffff;
-        border: 2px solid #2962ff;
-        border-radius: 8px;
+        border: 2px solid #00bcd4;
+        border-radius: 2px;
         padding: 14px 28px;
         font-size: 18px;
         cursor: pointer;
@@ -172,10 +170,26 @@
       }
 
       .share-button:hover {
-        background-color: #388e3c;
+        background-color: #00cccc;
         transform: scale(1.1);
       }
-
+      button.copy-button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      
+      button.copy-button:hover {
+        background-color: #45a049; /* Darker Green */
+      }
       .preview-section {
         background-color: #333;
         padding: 30px;
@@ -193,10 +207,10 @@
     } */
 
       .preview-button {
-        background-color: #2962ff;
+        background-color:  #00bcd4;
         color: #ffffff;
-        border: 2px solid #2962ff;
-        border-radius: 8px;
+        border: 2px solid  #00bcd4;
+        border-radius: 2px;
         padding: 14px 28px;
         font-size: 18px;
         cursor: pointer;
@@ -204,7 +218,7 @@
       }
 
       .preview-button:hover {
-        background-color: #388e3c;
+        background-color: #00cccc;
         transform: scale(1.1);
       }
 
@@ -222,7 +236,7 @@
 
       .pdf-preview {
         width: 100vw;
-        height: 80vh;
+        height: 83vh;
         border: 1px solid #ccc;
       }
 
@@ -230,6 +244,57 @@
       .file-preview audio {
         max-width: 100%;
         height: auto;
+      }
+      .custom-alert {
+        display: none;
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #f2f2f2;
+        color: #f8eeee;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 0.5s ease-in-out forwards;
+      }
+      
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      
+      .fade-out {
+        animation: fadeOut 0.5s ease-in-out forwards;
+      }
+      
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+      
+      .custom-alert p {
+        margin: 0;
+      }
+      
+      .custom-alert .close {
+        position: absolute;
+        top: 5px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 20px;
+      }
+      
+      .custom-alert .close:hover {
+        color: #999;
       }
     </style>
 
@@ -248,7 +313,46 @@
           hideFilePreview();
         }
       };
-
+      function displayFileName(input) {
+        const selectedFileNameElement = document.getElementById('selected-file-name');
+        const fileName = input.files[0].name;
+        selectedFileNameElement.innerHTML = `Selected File: ${fileName}`;
+        selectedFileNameElement.style.display = 'block';
+      }
+      function showAlert(message) {
+        var alertBox = document.getElementById("custom-alert");
+        var alertMessage = document.getElementById("alert-message");
+        var closeButton = document.querySelector(".custom-alert .close");
+      
+        alertMessage.innerHTML = message;
+        alertBox.style.display = "block";
+      
+        closeButton.onclick = function() {
+          alertBox.classList.add("fade-out");
+          setTimeout(function() {
+            alertBox.style.display = "none";
+            alertBox.classList.remove("fade-out");
+          }, 500);
+        };
+      
+        setTimeout(function() {
+          alertBox.classList.add("fade-out");
+          setTimeout(function() {
+            alertBox.style.display = "none";
+            alertBox.classList.remove("fade-out"); 
+          }, 500); 
+        }, 3000);
+      }
+      function copyLink(link) {
+        var tempInput = document.createElement("input");
+        tempInput.value = link;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        showAlert("Link copied to clipboard");
+      }
+      
       function displayFilePreview() {
         const fileInput = document.getElementById("file");
         const filePreviewContainer = document.getElementById(
@@ -305,6 +409,10 @@
   </head>
 
   <body>
+    <div id="custom-alert" class="custom-alert">
+      <span class="close">&times;</span>
+      <p id="alert-message"></p>
+    </div>
     <div class="container">
       <div class="upload-section">
         <% if (locals.fileLink != null) { %>
@@ -321,11 +429,11 @@
               d="M12 2a10 10 0 1010 10A10 10 0 0012 2zm2 14h-4v-2h4v2zm0-4h-4V6h4v6z"
             />
           </svg>
-          Your file has been uploaded! Access it using the link below:
+          Your file has been uploaded!
           <br />
-          <a class="file-link" href="<%= locals.fileLink %>"
-            ><%= locals.fileLink %></a
-          >
+          <!-- <a class="file-link" href="<%= locals.fileLink %>"><%= locals.fileLink %></a> -->
+          <!-- <input type="text" id="fileLink" value="<%= locals.fileLink %>" style="display: none;"> -->
+          <button class="copy-button" onclick="copyLink('<%= locals.fileLink %>')">Copy Link</button>
         </div>
         <% } %>
         <form action="/upload" method="post" enctype="multipart/form-data">
@@ -345,7 +453,16 @@
                 <header>
                   <h4>Select File here</h4>
                 </header>
-                <p>Files Supported: PDF, TEXT, DOC , DOCX</p>
+                <p>Files Supported: PDF , TEXT , DOC , DOCX , VIDEO , IMAGE</p>
+                <input
+                type="file"
+                id="file"
+                name="file"
+                hidden
+                id="fileID"
+                style="display: none"
+                onchange="displayFileName(this)"
+              />
                 <input
                   type="file"
                   id="file"
@@ -354,13 +471,14 @@
                   id="fileID"
                   style="display: none"
                 />
+                <div id="selected-file-name" style="color:#ccc;padding-bottom:15px"></div>
                 <label class="btn form-label" for="file">Choose Files</label>
                 
                 <!-- <button class="btn" for="file">Choose File</button> -->
               </div>
             </div>
           </div>
-          <label class="form-label" for="password">Password (optional):</label> <br><br>
+          <label class="form-label" for="password">Password (optional)</label> <br><br>
           <input
             class="form-input"
             type="password"
@@ -372,7 +490,7 @@
       </div>
 
       <div class="preview-section">
-        <label class="form-label" for="file">Preview Files:</label>
+        <!-- <label class="form-label" for="file">Preview Files:</label> -->
         <button
           class="preview-button"
           type="button"
@@ -384,74 +502,5 @@
       </div>
     </div>
 
-    <script>
-      window.onload = function () {
-        // Clear file link, input values, and hide preview on page reload
-        if (
-          window.performance &&
-          window.performance.navigation.type ===
-            window.performance.navigation.TYPE_RELOAD
-        ) {
-          document.querySelector(".upload-message").style.display = "none";
-          document.querySelector(".file-link").textContent = "";
-          document.querySelector("#file").value = "";
-          document.querySelector("#password").value = "";
-          hideFilePreview();
-        }
-      };
-
-      function displayFilePreview() {
-        const fileInput = document.getElementById("file");
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
-
-        // Clear existing previews
-        filePreviewContainer.innerHTML = "";
-
-        if (fileInput.files && fileInput.files.length > 0) {
-          // Loop through each selected file
-          for (const file of fileInput.files) {
-            const reader = new FileReader();
-            const filePreview = document.createElement("div");
-
-            reader.onload = function (e) {
-              if (file.type.startsWith("image/")) {
-                const imgPreview = document.createElement("img");
-                imgPreview.src = e.target.result;
-                imgPreview.classList.add("file-preview");
-                filePreview.appendChild(imgPreview);
-              } else if (file.type === "application/pdf") {
-                const pdfPreview = document.createElement("object");
-                pdfPreview.type = "application/pdf";
-                pdfPreview.data = e.target.result;
-                pdfPreview.classList.add("file-preview", "pdf-preview");
-                filePreview.appendChild(pdfPreview);
-              } else if (file.type.startsWith("text/")) {
-                const textPreview = document.createElement("pre");
-                textPreview.textContent = e.target.result;
-                filePreview.appendChild(textPreview);
-              } else if (file.type.startsWith("video/")) {
-                const videoPreview = document.createElement("video");
-                videoPreview.src = e.target.result;
-                videoPreview.controls = true;
-                videoPreview.classList.add("file-preview");
-                filePreview.appendChild(videoPreview);
-              }
-              filePreviewContainer.appendChild(filePreview);
-            };
-
-            reader.readAsDataURL(file);
-          }
-        }
-      }
-
-      function hideFilePreview() {
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
-        filePreviewContainer.innerHTML = "";
-      }
-    </script>
   </body>
 </html>
