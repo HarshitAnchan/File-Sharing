@@ -15,7 +15,9 @@
         background-color: #333;
         height: 97vh;
       }
-
+      p{
+        color: #ffffff;
+      }
       .container {
         display: flex;
         flex: 1;
@@ -251,7 +253,7 @@
         top: 10%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: #f2f2f2;
+        background-color: #b9b4b4;
         color: #f8eeee;
         padding: 20px;
         border-radius: 5px;
@@ -295,6 +297,38 @@
       
       .custom-alert .close:hover {
         color: #999;
+      }
+      .file-input {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        cursor: pointer;
+        padding: 14px 28px;
+        background-color: #00bcd4;
+        color: #ffffff;
+        border: 2px solid #00bcd4;
+        border-radius: 2px;
+        font-size: 18px;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+      
+      .file-input:hover {
+        background-color: #00cccc;
+        transform: scale(1.1);
+      }
+      
+      .file-input input[type="file"] {
+        position: absolute;
+        font-size: 100px;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      
+      .file-input label {
+        cursor: pointer;
       }
     </style>
 
@@ -353,51 +387,55 @@
         showAlert("Link copied to clipboard");
       }
       
-      function displayFilePreview() {
-        const fileInput = document.getElementById("file");
-        const filePreviewContainer = document.getElementById(
-          "file-preview-container"
-        );
+ function displayFilePreview() {
+    const fileInput = document.getElementById("files");
+    const fileIndexInput = document.getElementById("file-index");
+    const filePreviewContainer = document.getElementById("file-preview-container");
 
-        // Clear existing previews
-        filePreviewContainer.innerHTML = "";
+    // Clear existing previews
+    filePreviewContainer.innerHTML = "";
 
-        if (fileInput.files && fileInput.files.length > 0) {
-          // Loop through each selected file
-          for (const file of fileInput.files) {
+    if (fileInput.files && fileInput.files.length > 0) {
+        const selectedFileIndex = parseInt(fileIndexInput.value);
+
+        if (selectedFileIndex >= 0 && selectedFileIndex < fileInput.files.length) {
+            const file = fileInput.files[selectedFileIndex];
             const reader = new FileReader();
             const filePreview = document.createElement("div");
 
             reader.onload = function (e) {
-              if (file.type.startsWith("image/")) {
-                const imgPreview = document.createElement("img");
-                imgPreview.src = e.target.result;
-                imgPreview.classList.add("file-preview");
-                filePreview.appendChild(imgPreview);
-              } else if (file.type === "application/pdf") {
-                const pdfPreview = document.createElement("object");
-                pdfPreview.type = "application/pdf";
-                pdfPreview.data = e.target.result;
-                pdfPreview.classList.add("file-preview", "pdf-preview");
-                filePreview.appendChild(pdfPreview);
-              } else if (file.type.startsWith("text/")) {
-                const textPreview = document.createElement("pre");
-                textPreview.textContent = e.target.result;
-                filePreview.appendChild(textPreview);
-              } else if (file.type.startsWith("video/")) {
-                const videoPreview = document.createElement("video");
-                videoPreview.src = e.target.result;
-                videoPreview.controls = true;
-                videoPreview.classList.add("file-preview");
-                filePreview.appendChild(videoPreview);
-              }
-              filePreviewContainer.appendChild(filePreview);
+                if (file.type === "application/pdf") {
+                    const pdfPreview = document.createElement("embed");
+                    pdfPreview.src = URL.createObjectURL(new Blob([e.target.result], { type: "application/pdf" }));
+                    pdfPreview.classList.add("file-preview", "pdf-preview");
+                    filePreview.appendChild(pdfPreview);
+                } else if (file.type.startsWith("image/")) {
+                    const imgPreview = document.createElement("img");
+                    imgPreview.src = e.target.result;
+                    imgPreview.classList.add("file-preview");
+                    filePreview.appendChild(imgPreview);
+                } else if (file.type.startsWith("text/")) {
+                    const textPreview = document.createElement("pre");
+                    textPreview.textContent = e.target.result;
+                    filePreview.appendChild(textPreview);
+                } else if (file.type.startsWith("video/")) {
+                    const videoPreview = document.createElement("video");
+                    videoPreview.src = e.target.result;
+                    videoPreview.controls = true;
+                    videoPreview.classList.add("file-preview");
+                    filePreview.appendChild(videoPreview);
+                } else {
+                    console.error("Unsupported file type.");
+                }
             };
 
-            reader.readAsDataURL(file);
-          }
+            reader.readAsArrayBuffer(file);
+            filePreviewContainer.appendChild(filePreview);
+        } else {
+            console.error("Invalid file index selected.");
         }
-      }
+    }
+}
 
       function hideFilePreview() {
         const filePreviewContainer = document.getElementById(
@@ -472,7 +510,13 @@
                   style="display: none"
                 />
                 <div id="selected-file-name" style="color:#ccc;padding-bottom:15px"></div>
-                <label class="btn form-label" for="file">Choose Files</label>
+                <!-- <label class="btn form-label" for="file">Choose Files</label> -->
+                <!-- <input class="btn form-label"type="file" id="file" name="file" multiple> -->
+                <div class="file-input">
+                  <label for="file">Choose Files</label>
+                  <input type="file" id="files" name="file" multiple>
+                </div>
+                
                 
                 <!-- <button class="btn" for="file">Choose File</button> -->
               </div>
@@ -491,16 +535,12 @@
 
       <div class="preview-section">
         <!-- <label class="form-label" for="file">Preview Files:</label> -->
-        <button
-          class="preview-button"
-          type="button"
-          onclick="displayFilePreview()"
-        >
-          Preview Files
+        <p>File Number Starts from 0, for eg. if you have selected 4 files and want to preview the 3rd file the number will be 2.</p>
+         <p>Enter file Number</p> <input type="number" id="file-index" placeholder="" value="0"><br><br>
+        <button class="preview-button" type="button" onclick="displayFilePreview()">
+            Preview Files
         </button>
         <div class="file-preview-container" id="file-preview-container"></div>
-      </div>
     </div>
-
   </body>
 </html>
