@@ -344,6 +344,38 @@
     .file-input label {
       cursor: pointer;
     }
+
+    /* Loading */
+    .loading-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.loader {
+  border: 8px solid rgba(255, 255, 255, 0.3); /* Light border */
+  border-top: 8px solid #ffffff; /* White border */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
   </style>
 
   <script>
@@ -467,6 +499,22 @@
       );
       filePreviewContainer.innerHTML = "";
     }
+
+
+    /* Loading */
+
+    document.addEventListener("DOMContentLoaded", function() {
+  // Get the share button
+  var shareButton = document.querySelector('.share-button');
+  
+  // Add click event listener to the share button
+  shareButton.addEventListener('click', function() {
+    // Show the loading screen
+    var loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.display = 'block';
+  });
+});
+
   </script>
 </head>
 
@@ -475,6 +523,13 @@
     <span class="close">&times;</span>
     <p id="alert-message"></p>
   </div>
+
+  <!-- Add this loading screen element after the closing tag of <div id="custom-alert" class="custom-alert"> -->
+<div id="loading-screen" class="loading-screen">
+  <div class="loader"></div>
+</div>
+
+
   <div class="container">
     <div class="upload-section">
       <% if (locals.fileLink !=null) { %>
