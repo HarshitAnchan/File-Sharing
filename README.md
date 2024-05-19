@@ -74,7 +74,3 @@ In essence, FileDrop aims to make file sharing as easy, secure, and efficient as
   - *LinkedIn*: [Darshan Jain](https://www.linkedin.com/in/Darshan-Jain1)
   - *Email*: darshanjain768@gmail.com
 
-- *Harshit Anchan*
-  - *GitHub*: [HarshitAnchan](https://github.com/HarshitAnchan)
-  - *LinkedIn*: [Harshit Anchan](https://www.linkedin.com/in/harshitanchan)
-  - *Email*: 
