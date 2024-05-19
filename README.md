@@ -68,6 +68,10 @@ In essence, FileDrop aims to make file sharing as easy, secure, and efficient as
     The application will start on `http://localhost:3000`.
 
     ## Collaborators
+- *Harshit Anchan*
+  - *GitHub*: [HarshitAnchan](https://github.com/HarshitAnchan)
+  - *LinkedIn*: [Harshit Anchan](https://www.linkedin.com/in/harshitanchan)
+  - *Email*: harshitanchan647@gmail.com
 
 - *Darshan Jain*
   - *GitHub*: [Darshan1412](https://github.com/Darshan1412)
