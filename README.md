@@ -39,32 +39,33 @@ FileDrop leverages modern web technologies to provide a robust and reliable file
 
 In essence, FileDrop aims to make file sharing as easy, secure, and efficient as possible. Whether you need to share a single document or a collection of files, FileDrop provides a trustworthy platform for all your file-sharing needs.
 
+
 ## Installation
 
-1. *Clone the Repository*
+1. **Clone the Repository**
 
-2. *Install Dependencies*
+2. **Install Dependencies**
 
-    bash
+    ```bash
     npm install
-    
+    ```
 
-3. *Set Up Environment Variables*
+3. **Set Up Environment Variables**
 
-    Create a .env file in the root directory and add the following:
+    Create a `.env` file in the root directory and add the following:
 
-    env
+    ```env
     PORT=3000
     DATABASE_URL=your_mongodb_uri
-    
+    ```
 
-4. *Run the Application*
+4. **Run the Application**
 
-    bash
+    ```bash
     npm start
-    
+    ```
 
-    The application will start on http://localhost:3000.
+    The application will start on `http://localhost:3000`.
 
     ## Collaborators
 
