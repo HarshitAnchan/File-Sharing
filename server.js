@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
-cron.schedule('* * * * *', () => {
+cron.schedule('*/20 * * * *', () => {
   console.log('Hello World');
 });
 
