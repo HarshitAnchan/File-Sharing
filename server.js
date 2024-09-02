@@ -6,6 +6,7 @@ const File = require("./models/File");
 const archiver = require("archiver");
 const fs = require("fs");
 const path = require("path");
+const  cron = require("node-cron");
 
 const express = require("express");
 const app = express();
@@ -19,6 +20,10 @@ app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+cron.schedule('* * * * *', () => {
+  console.log('Hello World');
 });
 
 // app.post("/upload", upload.array("file"), async (req, res) => {
@@ -160,8 +165,6 @@ async function handleDownload(req, res) {
     res.status(500).send("Internal Server Error");
   }
 }
-
-
 
 // async function handleDownload(req, res) {
 //   try {
